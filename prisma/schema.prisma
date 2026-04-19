@@ -1,0 +1,153 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+//////////////////////////////////////////////////////
+// AUTH MODELS (Mapped to lowercase tables)
+//////////////////////////////////////////////////////
+enum Role {
+  USER
+  ADMIN
+}
+
+model user {
+  id            String  @id @default(cuid())
+  email         String  @unique
+  emailVerified Boolean @default(false)
+  name          String?
+  image         String?
+
+  // Using String for role to ensure Better Auth compatibility 
+  // without complex enum mapping logic.
+  role String @default("USER")
+
+  sessions session[]
+  accounts account[]
+  websites website[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+
+  userId String
+  user   user   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model account {
+  id         String @id @default(cuid())
+  accountId  String
+  providerId String
+  userId     String
+  user       user   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("accounts")
+}
+
+model verification {
+  id         String    @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+
+  @@map("verifications")
+}
+
+//////////////////////////////////////////////////////
+// MONITORING SYSTEM MODELS
+//////////////////////////////////////////////////////
+
+model website {
+  id          String  @id @default(cuid())
+  name        String
+  url         String?
+  apiKey      String  @unique
+  environment String  @default("production")
+  isActive    Boolean @default(true)
+
+  userId String
+  user   user   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  logs   log[]
+  alerts alert[]
+
+  createdAt DateTime @default(now())
+
+  @@index([apiKey])
+  @@index([userId])
+  @@map("websites")
+}
+
+model log {
+  id        String  @id @default(cuid())
+  websiteId String
+  website   website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  type         String // REQUEST / ERROR
+  status       Int?
+  method       String?
+  url          String?
+  responseTime Int? // In milliseconds
+
+  message  String?
+  stack    String?
+  metadata Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([websiteId, createdAt])
+  @@index([status])
+  @@map("logs")
+}
+
+model alert {
+  id        String  @id @default(cuid())
+  websiteId String
+  website   website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  type     String
+  severity String @default("MEDIUM")
+  message  String
+
+  // AI-generated insights
+  aiReason     String?
+  aiSuggestion String?
+
+  status String @default("OPEN")
+
+  triggeredAt DateTime  @default(now())
+  resolvedAt  DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([websiteId, status])
+  @@map("alerts")
+}
