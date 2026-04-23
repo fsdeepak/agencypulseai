@@ -1,10 +1,10 @@
 import { fromNodeHeaders } from "better-auth/node";
 import { auth } from "../../lib/auth";
-import { z } from "zod";
 import { prisma } from "../../config/db.config";
+import { Request, Response } from "express";
 
 const mapAuthHeaders = (authResponse: Response, res: Response) => {
-  authResponse.headers.forEach((value, key) => {
+  authResponse.headers.forEach((value: string, key: string) => {
     if (key.toLowerCase() === "set-cookie") {
       res.append(key, value);
     } else {
@@ -13,18 +13,13 @@ const mapAuthHeaders = (authResponse: Response, res: Response) => {
   });
 };
 
-const registerSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password  must be at least 8 characters"),
-  name: z.string().min(3, "Name is required"),
-});
 export async function register(req: Request, res: Response) {
   try {
-    const validatedData = registerSchema.parse(req.body);
+    const { name, email, password } = req.body;
 
     const isUserExists = await prisma.user.findUnique({
       where: {
-        email: validatedData.email,
+        email: email,
       },
     });
 
@@ -37,15 +32,15 @@ export async function register(req: Request, res: Response) {
 
     await auth.api.signUpEmail({
       body: {
-        email: validatedData.email,
-        password: validatedData.password,
-        name: validatedData.name,
+        email: email,
+        password: password,
+        name: name,
       },
     });
 
     await auth.api.sendVerificationEmail({
       body: {
-        email: validatedData.email,
+        email: email,
         callbackURL: process.env.REDIRECT_LOGIN,
       },
     });
@@ -60,11 +55,6 @@ export async function register(req: Request, res: Response) {
         success: false,
         message: "An account with this email already exists.",
       });
-    }
-
-    // Handle Zod errors...
-    if (error instanceof z.ZodError) {
-      return res.status(400).json({ success: false, errors: error.errors });
     }
 
     return res
@@ -90,7 +80,7 @@ export async function verifyEmail(req: Request, res: Response) {
 
     const redirectUrl = (callbackURL as string) || process.env.REDIRECT_LOGIN;
     return res.redirect(`${redirectUrl}?verified=true`);
-  } catch (error) {
+  } catch (error: any) {
     if (error.name == "TokenExpiredError") {
       return res.status(410).json({
         success: false,
@@ -112,18 +102,14 @@ export async function verifyEmail(req: Request, res: Response) {
   }
 }
 
-const loginSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string(),
-});
 export async function login(req: Request, res: Response) {
   try {
-    const validatedData = loginSchema.parse(req.body);
+    const { email, password } = req.body;
 
     const authResponse = await auth.api.signInEmail({
       body: {
-        email: validatedData.email,
-        password: validatedData.password,
+        email: email,
+        password: password,
       },
       asResponse: true,
     });
@@ -147,15 +133,7 @@ export async function login(req: Request, res: Response) {
       message: "User logged in successfully",
       data,
     });
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return res.status(400).json({
-        success: false,
-        message: "Validation failed",
-        errors: error.errors,
-      });
-    }
-
+  } catch (error: any) {
     return res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -247,13 +225,10 @@ export async function resendVerificationEmail(req: Request, res: Response) {
   }
 }
 
-const resetPasswordSchema = z.object({
-  email: z.string().email("Invalid email address"),
-});
 export async function resetPassword(req: Request, res: Response) {
-  const validatedData = resetPasswordSchema.safeParse(req.body);
+  const { email } = req.body;
 
-  if (!validatedData.success) {
+  if (!email) {
     return res.status(400).json({
       success: false,
       message: "Email is required",
@@ -261,7 +236,6 @@ export async function resetPassword(req: Request, res: Response) {
   }
 
   try {
-    const { email } = validatedData.data;
     await auth.api.requestPasswordReset({
       body: {
         email: email,
@@ -290,14 +264,10 @@ export async function getResetToken(req: Request, res: Response) {
   return res.redirect(frontendURl);
 }
 
-const setPasswordSchema = z.object({
-  token: z.string().min(6),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-});
 export async function setPassword(req: Request, res: Response) {
-  const validatedData = setPasswordSchema.parse(req.body);
+  const { password, token } = req.body;
 
-  if (!validatedData) {
+  if (!password || !token) {
     return res
       .status(400)
       .json({ success: false, message: "Token and password are required" });
@@ -306,8 +276,8 @@ export async function setPassword(req: Request, res: Response) {
   try {
     await auth.api.resetPassword({
       body: {
-        newPassword: validatedData.password,
-        token: validatedData.token,
+        newPassword: password,
+        token: token,
       },
       headers: req.headers as any,
     });

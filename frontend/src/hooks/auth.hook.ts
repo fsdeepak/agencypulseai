@@ -7,7 +7,7 @@ import {
   handleResetPasswordVerification,
   handeSetPassword,
 } from "@/services/auth.service";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -25,11 +25,14 @@ export const useRegiter = () => {
 };
 
 export const useLogin = () => {
+  const queryClient = useQueryClient();
+
   const router = useRouter();
   return useMutation({
     mutationFn: handleLogin,
     onSuccess: () => {
       toast.success("Welcome back");
+      queryClient.invalidateQueries({ queryKey: ["user"] });
       router.push("/dashboard");
     },
     onError: (error: any) => {
@@ -58,6 +61,7 @@ export const useGetMe = () => {
     queryFn: handleGetMe,
     retry: false,
     staleTime: 10 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
   });
 };
 

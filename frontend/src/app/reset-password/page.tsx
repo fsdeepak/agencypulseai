@@ -69,8 +69,6 @@ const page = () => {
 
   const handleSetPassword = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(password);
-    console.log(token);
     mutate({ password, token });
   };
 

@@ -18,7 +18,7 @@ const cta = () => {
         </p>
         <a
           href="/register"
-          className="inline-flex items-center gap-3 px-10 py-5 text-base font-bold rounded-2xl bg-gradient-to-r from-[#6c3bf5] to-[#00d4ff] text-white shadow-[0_0_60px_rgba(108,59,245,0.5)] hover:shadow-[0_0_80px_rgba(108,59,245,0.7)] hover:scale-105 transition-all duration-200"
+          className="inline-flex items-center gap-3 px-10 py-5 text-base font-bold rounded-2xl btnColor text-white shadow-[0_0_60px_rgba(108,59,245,0.5)] hover:shadow-[0_0_80px_rgba(108,59,245,0.7)] hover:scale-105 transition-all duration-200"
         >
           Start for Free — No Credit Card Needed
           <svg

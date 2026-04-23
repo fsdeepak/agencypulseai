@@ -128,7 +128,7 @@ const loginUser = ({
           </label>
           <Link
             href="/forgot-password"
-            className="text-xs text-[#6c3bf5] hover:text-[#ccbeff] transition-colors duration-150"
+            className="text-xs text-[#ed9f22] hover:text-[#ccbeff] transition-colors duration-150"
           >
             Forgot password?
           </Link>
@@ -150,7 +150,7 @@ const loginUser = ({
           <button
             type="button"
             onClick={() => setShowPw(!showPassword)}
-            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#494456] hover:text-[#ccbeff] transition-colors duration-200"
+            className="cursor-pointer absolute right-3.5 top-1/2 -translate-y-1/2 text-[#494456] hover:text-[#ccbeff] transition-colors duration-200"
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
             <EyeIcon open={showPassword} />
@@ -163,7 +163,7 @@ const loginUser = ({
         id="signInBtn"
         type="submit"
         disabled={isPending}
-        className="w-full py-3.5 px-6 rounded-xl font-semibold text-sm text-white bg-gradient-to-r from-[#6c3bf5] to-[#00d4ff] shadow-[0_0_30px_rgba(108,59,245,0.4)] hover:shadow-[0_0_50px_rgba(108,59,245,0.6)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
+        className="cursor-pointer w-full py-3.5 px-6 rounded-xl font-semibold text-sm text-white btnColor shadow-[0_0_30px_rgba(108,59,245,0.4)] hover:shadow-[0_0_50px_rgba(108,59,245,0.6)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
       >
         {isPending ? (
           <>

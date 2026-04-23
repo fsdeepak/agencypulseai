@@ -10,15 +10,22 @@ import {
   setPassword,
   verifyEmail,
 } from "./auth.controller";
-import { authMiddleware } from "./auth.middleware";
+import { authMiddleware } from "../../globalMiddleware/auth.middlware";
+import { validate } from "../../globalMiddleware/validate.middleware";
+import {
+  loginSchema,
+  registerSchema,
+  resetPasswordSchema,
+  setPasswordSchema,
+} from "./auth.schema";
 
 const authRoute = Router();
 
-authRoute.post("/register", register);
+authRoute.post("/register", validate(registerSchema), register);
 
 authRoute.get("/verify-email", verifyEmail);
 
-authRoute.post("/login", login);
+authRoute.post("/login", validate(loginSchema), login);
 
 authRoute.post("/resend-verifcation-email", resendVerificationEmail);
 
@@ -26,10 +33,14 @@ authRoute.post("/logout", logout);
 
 authRoute.get("/me", authMiddleware, getMe);
 
-authRoute.post("/request-password-reset", resetPassword);
+authRoute.post(
+  "/request-password-reset",
+  validate(resetPasswordSchema),
+  resetPassword,
+);
 
 authRoute.get("/reset-password/:token", getResetToken);
 
-authRoute.post("/reset-password", setPassword);
+authRoute.post("/reset-password", validate(setPasswordSchema), setPassword);
 
 export default authRoute;

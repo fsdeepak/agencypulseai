@@ -1,6 +1,6 @@
 import { fromNodeHeaders } from "better-auth/node";
-import { NextFunction } from "express";
-import { auth } from "../../lib/auth";
+import { auth } from "../lib/auth";
+import { Request, Response, NextFunction } from "express";
 
 export const authMiddleware = async (
   req: Request,
@@ -15,7 +15,7 @@ export const authMiddleware = async (
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  (req as any).user = session.user;
-  (req as any).session = session.session;
+  req.user = session.user;
+  req.session = session.session;
   next();
 };

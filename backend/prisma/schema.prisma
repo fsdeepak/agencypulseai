@@ -14,6 +14,11 @@ enum Role {
   ADMIN
 }
 
+enum Env {
+  PRODUCTION
+  DEVELOPMENT
+}
+
 model user {
   id            String  @id @default(cuid())
   email         String  @unique
@@ -89,9 +94,9 @@ model verification {
 model website {
   id          String  @id @default(cuid())
   name        String
-  url         String?
+  url         String  @unique
   apiKey      String  @unique
-  environment String  @default("production")
+  environment Env     @default(PRODUCTION)
   isActive    Boolean @default(true)
 
   userId String

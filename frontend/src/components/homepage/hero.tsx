@@ -27,7 +27,7 @@ const hero = () => {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
           <a
             href="/register"
-            className="flex items-center gap-2 px-8 py-4 text-base font-semibold rounded-xl bg-gradient-to-r from-[#6c3bf5] to-[#00d4ff] text-white shadow-[0_0_40px_rgba(108,59,245,0.5)] hover:shadow-[0_0_60px_rgba(108,59,245,0.7)] hover:scale-105 transition-all duration-200"
+            className="flex items-center gap-2 px-8 py-4 text-base font-semibold rounded-xl btnColor text-white shadow-[0_0_40px_rgba(108,59,245,0.5)] hover:shadow-[0_0_60px_rgba(108,59,245,0.7)] hover:scale-105 transition-all duration-200"
           >
             Start Free Trial
             <svg

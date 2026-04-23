@@ -62,7 +62,7 @@ const rightSide = () => {
           Don&apos;t have an account?{" "}
           <Link
             href="/register"
-            className="text-[#ccbeff] hover:text-[#a2e7ff] font-medium transition-colors duration-150"
+            className="text-[#ed9f22] hover:text-[#a2e7ff] font-medium transition-colors duration-150"
           >
             Create one free
           </Link>

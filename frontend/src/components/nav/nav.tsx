@@ -3,8 +3,10 @@
 import { useGetMe } from "@/hooks/auth.hook";
 import { useLogout } from "@/hooks/auth.hook";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 const nav = () => {
+  const route = useRouter();
   const queryClient = useQueryClient();
   const { data } = useGetMe();
 
@@ -16,6 +18,7 @@ const nav = () => {
     mutate(undefined, {
       onSuccess: () => {
         queryClient.setQueryData(["user"], null);
+        route.push("/login");
       },
     });
   };
@@ -57,6 +60,12 @@ const nav = () => {
               >
                 Logout
               </a>
+              <a
+                href="/dashboard"
+                className="px-4 py-2 text-sm font-semibold rounded-lg btnColor text-white shadow-[0_0_24px_rgba(108,59,245,0.5)] hover:shadow-[0_0_32px_rgba(108,59,245,0.7)] hover:scale-105 transition-all duration-200"
+              >
+                Dashboard
+              </a>
             </div>
           ) : (
             <div className="flex items-center gap-3">
@@ -68,7 +77,7 @@ const nav = () => {
               </a>
               <a
                 href="/register"
-                className="px-4 py-2 text-sm font-semibold rounded-lg bg-gradient-to-r from-[#6c3bf5] to-[#00d4ff] text-white shadow-[0_0_24px_rgba(108,59,245,0.5)] hover:shadow-[0_0_32px_rgba(108,59,245,0.7)] hover:scale-105 transition-all duration-200"
+                className="px-4 py-2 text-sm font-semibold rounded-lg btnColor text-white shadow-[0_0_24px_rgba(108,59,245,0.5)] hover:shadow-[0_0_32px_rgba(108,59,245,0.7)] hover:scale-105 transition-all duration-200"
               >
                 Get Started Free
               </a>
