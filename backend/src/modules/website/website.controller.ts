@@ -37,16 +37,11 @@ export async function createWebsite(req: Request, res: Response) {
 
     const apiKey = crypto.randomBytes(32).toString("hex").slice(0, 24);
 
-    const hashedApiKey = crypto
-      .createHash("sha256")
-      .update(apiKey)
-      .digest("hex");
-
     const website = await prisma.website.create({
       data: {
         name: name,
         url: url,
-        apiKey: hashedApiKey,
+        apiKey: apiKey,
         userId: userId,
       },
     });
@@ -54,7 +49,45 @@ export async function createWebsite(req: Request, res: Response) {
     return res.status(201).json({
       success: true,
       message: "Website added successfully",
-      apiKey: apiKey,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
+}
+
+export async function getWebsites(req: Request, res: Response) {
+  try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const websites = await prisma.website.findMany({
+      where: {
+        userId: userId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+        name: true,
+        url: true,
+        apiKey: true,
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "All websites feteched successfully",
+      websites,
     });
   } catch (error) {
     return res.status(500).json({

@@ -1,12 +1,10 @@
-// middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function proxy(request: NextRequest) {
-  // 1. Get the session cookie (Better Auth default name)
+// 1. Change this to 'export default'
+export default function proxy(request: NextRequest) {
   const sessionCookie = request.cookies.get("better-auth.session_token");
 
-  // 2. Define which routes are "Private"
   const isProtectedRoute =
     request.nextUrl.pathname.startsWith("/dashboard") ||
     request.nextUrl.pathname.startsWith("/settings") ||
@@ -20,6 +18,7 @@ export function proxy(request: NextRequest) {
   return NextResponse.next();
 }
 
+// 2. Keep your config as a named export
 export const config = {
   matcher: ["/dashboard/:path*", "/settings/:path*", "/profile/:path*"],
 };

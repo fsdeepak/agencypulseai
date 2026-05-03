@@ -1,15 +1,20 @@
 "use client";
 import { useState } from "react";
+import { useAddWebsite } from "@/hooks/website.hook";
 
 const page = () => {
-  const [name, setName] = useState("");
-  const [url, setUrl] = useState("");
+  const [name, setName] = useState<string>("");
+  const [url, setUrl] = useState<string>("");
 
-  const isPending = false;
-
+  const { mutate, isPending } = useAddWebsite();
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(name, url);
+
+    const payload = { name, url };
+    mutate(payload);
+
+    setName("");
+    setUrl("");
   };
   return (
     <div className="min-h-screen bg-[#0A0A12] text-[#e4e1ed] font-sans antialiased pt-30">
@@ -23,7 +28,7 @@ const page = () => {
       <div className="flex justify-center items-center">
         <div className="w-96">
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Full Name */}
+            {/* Website Name */}
             <div>
               <label
                 htmlFor="name"
@@ -44,7 +49,7 @@ const page = () => {
               </div>
             </div>
 
-            {/* Email */}
+            {/* Website URL */}
             <div>
               <label
                 htmlFor="url"

@@ -12,13 +12,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: "http://localhost:3000",
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
   }),
 );
 
 app.use("/api/auth", authRoute);
 
-app.use("/api/website", websiteRoute);
+app.use("/api/website/", websiteRoute);
 
 export default app;

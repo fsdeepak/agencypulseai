@@ -19,9 +19,9 @@
   }
 }
 
-@layer components{
-  .btnColor{
-    @apply bg-gradient-to-r from-[#f49111] to-[#f5b43b];
+@layer components {
+  .btn {
+    @apply bg-gradient-to-r from-[#f49111] to-[#f5b43b] cursor-pointer py-3.5 px-6 rounded-xl font-light text-sm text-white hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2;
   }
 }
 

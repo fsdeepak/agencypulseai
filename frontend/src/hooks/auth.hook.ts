@@ -33,7 +33,7 @@ export const useLogin = () => {
     onSuccess: () => {
       toast.success("Welcome back");
       queryClient.invalidateQueries({ queryKey: ["user"] });
-      router.push("/dashboard");
+      router.replace("/dashboard");
     },
     onError: (error: any) => {
       const message = error.response?.data?.message || "Invalid credentital";
@@ -62,6 +62,8 @@ export const useGetMe = () => {
     retry: false,
     staleTime: 10 * 60 * 1000,
     gcTime: 15 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
   });
 };
 
@@ -95,7 +97,7 @@ export const useSetPassword = () => {
     mutationFn: handeSetPassword,
     onSuccess: () => {
       toast.success("Password reset successfully");
-      router.push("/login");
+      router.replace("/login");
     },
 
     onError: (error: any) => {
