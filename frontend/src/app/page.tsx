@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Hero from "../components/homepage/hero";
-import Installation from "@/components/homepage/installation";
 import Features from "@/components/homepage/features";
 import Metrics from "@/components/homepage/metrics";
 import CTA from "@/components/homepage/cta";
@@ -16,8 +15,6 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#0A0A12] text-[#e4e1ed] font-sans antialiased">
       <Hero />
-
-      <Installation />
 
       <Features />
 

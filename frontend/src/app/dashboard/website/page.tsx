@@ -75,7 +75,7 @@ const page = () => {
               id="createAccountBtn"
               type="submit"
               disabled={isPending}
-              className="cursor-pointer w-full py-3.5 px-6 rounded-xl font-semibold text-sm text-white btnColor shadow-[0_0_30px_rgba(108,59,245,0.4)] hover:shadow-[0_0_50px_rgba(108,59,245,0.6)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-[0_0_30px_rgba(108,59,245,0.4)] flex items-center justify-center gap-2"
+              className="btn w-full"
             >
               {isPending ? (
                 <>

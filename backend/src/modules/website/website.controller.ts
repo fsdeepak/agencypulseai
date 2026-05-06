@@ -96,3 +96,82 @@ export async function getWebsites(req: Request, res: Response) {
     });
   }
 }
+
+export async function updateWebsite(req: Request, res: Response) {
+  try {
+    const userId = req.user?.id;
+
+    const { id } = req.params;
+
+    const { name, url } = req.body;
+
+    const isValidWebsite = await prisma.website.findFirst({
+      where: {
+        userId: userId,
+        id: id,
+      },
+    });
+
+    if (!isValidWebsite) {
+      return res.status(404).json({
+        success: false,
+        message: "Website not found",
+      });
+    }
+
+    const website = await prisma.website.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name: name,
+        url: url,
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      messsage: "Website update successfully.",
+      website,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
+}
+
+export async function deleteWebsite(req: Request, res: Response) {
+  try {
+    const userId = req.user?.id;
+    const { id } = req.params;
+
+    const isValidWebsite = await prisma.website.findFirst({
+      where: { id: id },
+    });
+
+    if (!isValidWebsite) {
+      return res.status(404).json({
+        success: false,
+        message: "Website not found",
+      });
+    }
+
+    const website = await prisma.website.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Website deleted successfully.",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
+}

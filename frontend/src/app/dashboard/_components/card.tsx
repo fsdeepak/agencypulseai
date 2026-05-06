@@ -9,30 +9,25 @@ interface Cardprops {
 
 const Card = ({ name, url, id }: Cardprops) => {
   return (
-    <div className="bg-neutral-primary-soft block max-w-sm p-6 border border-default rounded-base shadow-xs rounded-2xl">
+    <div className="bg-neutral-800 block max-w-sm p-6 border border-default rounded-base shadow-xs rounded-2xl">
       <img className="h-11" src={websiteIcon.src} alt="" />
 
       <h5 className="mb-2 text-2xl font-semibold tracking-tight text-heading pt-2 text-white/85">
         {name}
       </h5>
 
-      <Link
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex font-medium items-center text-fg-brand hover:underline text-white/85"
-      >
+      <p className="inline-flex font-medium items-center text-fg-brand text-white/85">
         {url}
-      </Link>
-      <div className="flex items-center justify-between">
+      </p>
+      <div className="flex justify-between">
         <div>
           <Link href={`/dashboard/website/${id}`}>
-            <button className="px-6 py-3 btn mt-6">Details</button>
+            <button className="px-14 py-3 btn mt-6">Details</button>
           </Link>
         </div>
         <div>
-          <Link href={`/dashboard/website/${id}`}>
-            <button className="px-6 py-3 btn mt-6">Edit</button>
+          <Link href={`/dashboard/website/${id}/logs`}>
+            <button className="px-16 py-3 btn mt-6">Logs</button>
           </Link>
         </div>
       </div>

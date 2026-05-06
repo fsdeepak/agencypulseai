@@ -19,6 +19,7 @@ interface ResendUserProps {
   email: string;
   setEmail: (val: string) => void;
   isPending: boolean;
+  onBack: () => void;
 }
 
 const resendVerificationLink = ({

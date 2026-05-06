@@ -11,14 +11,31 @@ export const handleAddWebsite = async (data: addWebsiteVariables) => {
   return response.data;
 };
 
-interface Website {
+interface websiteVariable {
   id: string;
   name: string;
   url: string;
   apiKey: string;
 }
-export const handleGetWebsite = async (): Promise<Website[]> => {
+export const handleGetWebsite = async (): Promise<websiteVariable[]> => {
   const response = await api.get("/website/");
 
   return response.data.websites;
+};
+
+interface updateWebsiteVariable extends addWebsiteVariables {
+  id: string;
+}
+
+export const handleUpdateWebsite = async (data: updateWebsiteVariable) => {
+  const response = await api.patch(`/website/${data.id}`, data);
+  return response.data;
+};
+
+interface deleteWebsiteVariable {
+  id: string;
+}
+export const handleDeleteWebsite = async (data: deleteWebsiteVariable) => {
+  const response = await api.delete(`/website/${data.id}`);
+  return response.data;
 };

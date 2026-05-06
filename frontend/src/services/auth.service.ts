@@ -55,7 +55,7 @@ export const handleResetPasswordVerification = async (
 
 interface setPasswordVariable {
   password: string;
-  token: string;
+  token: string | null;
 }
 
 export const handeSetPassword = async (data: setPasswordVariable) => {

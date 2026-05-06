@@ -45,7 +45,7 @@ const nav = () => {
               Features
             </Link>
             <Link
-              href="#sdk"
+              href="/doc"
               className="hover:text-[#ccbeff] transition-colors duration-200"
             >
               Docs

@@ -35,7 +35,7 @@ model user {
   websites website[]
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map("users")
 }
@@ -44,10 +44,10 @@ model session {
   id        String   @id @default(cuid())
   expiresAt DateTime
   token     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
   ipAddress String?
   userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   userId String
   user   user   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -71,7 +71,7 @@ model account {
   password              String?
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map("accounts")
 }
@@ -81,15 +81,11 @@ model verification {
   identifier String
   value      String
   expiresAt  DateTime
-  createdAt  DateTime? @default(now())
-  updatedAt  DateTime? @updatedAt
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @default(now())
 
   @@map("verifications")
 }
-
-//////////////////////////////////////////////////////
-// MONITORING SYSTEM MODELS
-//////////////////////////////////////////////////////
 
 model website {
   id          String  @id @default(cuid())
@@ -123,9 +119,8 @@ model log {
   url          String?
   responseTime Int? // In milliseconds
 
-  message  String?
-  stack    String?
-  metadata Json?
+  message String?
+  stack   String?
 
   createdAt DateTime @default(now())
 
@@ -143,16 +138,16 @@ model alert {
   severity String @default("MEDIUM")
   message  String
 
-  // AI-generated insights
+  url    String
+  method String
+  status Int?
+
   aiReason     String?
   aiSuggestion String?
 
-  status String @default("OPEN")
+  triggeredAt DateTime @default(now())
+  createdAt   DateTime @default(now())
 
-  triggeredAt DateTime  @default(now())
-  resolvedAt  DateTime?
-  createdAt   DateTime  @default(now())
-
-  @@index([websiteId, status])
+  @@index([websiteId])
   @@map("alerts")
 }
