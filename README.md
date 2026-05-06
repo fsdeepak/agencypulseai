@@ -124,24 +124,24 @@ AgencyPulse AI/
 │   ├── prisma/
 │   │   └── schema.prisma           # Full DB schema
 │   ├── server.ts                   # HTTP server entrypoint
-│   └── dockerfile
+│
 │
 └── frontend/
     ├── src/
-    │   ├── app/
-    │   │   ├── (auth pages)        # login, register, forgot/reset-password
-    │   │   └── dashboard/
-    │   │       ├── page.tsx        # Website list dashboard
-    │   │       └── website/
-    │   │           ├── page.tsx    # Website overview
-    │   │           └── [id]/
-    │   │               ├── logs/   # HTTP log viewer
-    │   │               └── alerts/ # Alert viewer with AI insights
-    │   ├── components/             # Shared UI components
-    │   ├── hooks/                  # Custom React hooks
-    │   ├── services/               # Axios API service layer
-    │   └── lib/                    # Helpers & constants
-    └── dockerfile
+         ├── app/
+         │   ├── (auth pages)        # login, register, forgot/reset-password
+         │   └── dashboard/
+         │       ├── page.tsx        # Website list dashboard
+         │       └── website/
+         │           ├── page.tsx    # Website overview
+         │           └── [id]/
+         │               ├── logs/   # HTTP log viewer
+         │               └── alerts/ # Alert viewer with AI insights
+         ├── components/             # Shared UI components
+         ├── hooks/                  # Custom React hooks
+         ├── services/               # Axios API service layer
+         └── lib/                    # Helpers & constants
+
 ```
 
 ---
@@ -250,15 +250,15 @@ The backend will persist the log, evaluate it for alert conditions, and if it's 
 
 ## 🔐 API Reference
 
-| Method   | Endpoint           | Auth    | Description                                                      |
-| -------- | ------------------ | ------- | ---------------------------------------------------------------- |
-| `POST`   | `/api/auth/*`      | —       | Auth routes (Better-Auth handles register, login, verify, reset) |
-| `GET`    | `/api/website`     | ✅      | List all websites for the logged-in user                         |
-| `POST`   | `/api/website`     | ✅      | Register a new website                                           |
-| `DELETE` | `/api/website/:id` | ✅      | Remove a website                                                 |
-| `POST`   | `/api/collect`     | API Key | Ingest a log entry from a monitored website                      |
-| `GET`    | `/api/logs/:id`    | ✅      | Retrieve logs for a website                                      |
-| `GET`    | `/api/alerts/:id`  | ✅      | Retrieve alerts (including AI insights) for a website            |
+| Method   | Endpoint           | Auth    | Description                                           |
+| -------- | ------------------ | ------- | ----------------------------------------------------- |
+| `POST`   | `/api/auth/*`      | ✅      | Auth routes (register, login, verify, reset)          |
+| `GET`    | `/api/website`     | ✅      | List all websites for the logged-in user              |
+| `POST`   | `/api/website`     | ✅      | Register a new website                                |
+| `DELETE` | `/api/website/:id` | ✅      | Remove a website                                      |
+| `POST`   | `/api/collect`     | API Key | Ingest a log entry from a monitored website           |
+| `GET`    | `/api/logs/:id`    | ✅      | Retrieve logs for a website                           |
+| `GET`    | `/api/alerts/:id`  | ✅      | Retrieve alerts (including AI insights) for a website |
 
 ---
 
