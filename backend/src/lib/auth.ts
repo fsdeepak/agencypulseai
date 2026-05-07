@@ -3,35 +3,51 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "../config/db.config";
 import { resend, sender } from "./resend";
-// Removed unnecessary console import
+
+interface AuthCallbackUser {
+  id: string;
+  email: string;
+  emailVerified: boolean;
+  name: string;
+  image?: string | null;
+  role?: string; // This matches your additionalFields
+}
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
   session: {
-    strategy: "jwt",
     expiresIn: 60 * 60 * 24 * 7,
     updateAge: 60 * 60 * 24,
   },
   emailVerification: {
-    enabled: true,
     sendOnSignUp: false,
-    sendVerificationEmail: async ({ user, url }) => {
+    sendVerificationEmail: async ({
+      user,
+      url,
+    }: {
+      user: AuthCallbackUser;
+      url: string;
+    }) => {
       await resend.emails.send({
         from: sender,
         to: user.email,
         subject: "Welcome! Please verify your email",
-        // Added name fallback for a professional touch
         html: `<p>Hello ${user.name || "User"},</p><p>Verify your account by clicking <a href="${url}">here</a>.</p>`,
       });
     },
   },
-
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
-    sendResetPassword: async ({ user, url }) => {
+    sendResetPassword: async ({
+      user,
+      url,
+    }: {
+      user: AuthCallbackUser;
+      url: string;
+    }) => {
       await resend.emails.send({
         from: sender,
         to: user.email,
@@ -40,7 +56,6 @@ export const auth = betterAuth({
       });
     },
   },
-
   user: {
     additionalFields: {
       role: {
@@ -51,13 +66,14 @@ export const auth = betterAuth({
     },
   },
 
-  trustedOrigins: [process.env.BETTER_AUTH_TRUSTED],
+  trustedOrigins: [process.env.BETTER_AUTH_TRUSTED!],
+
   advanced: {
     cookiePrefix: "better-auth",
-    useSecureCookies: false,
+    useSecureCookies: process.env.NODE_ENV === "production",
   },
 
-  secret: process.env.BETTER_AUTH_SECRET,
-  baseURL: process.env.BETTER_AUTH_URL, // Must include http://
+  secret: process.env.BETTER_AUTH_SECRET!,
+  baseURL: process.env.BETTER_AUTH_URL!,
   basePath: "/api/auth",
 });
