@@ -4,30 +4,35 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "../config/db.config";
 import { resend, sender } from "./resend";
 
+const isProd = process.env.NODE_ENV === "production";
+
 interface AuthCallbackUser {
   id: string;
   email: string;
   emailVerified: boolean;
   name: string;
   image?: string | null;
-  role?: string; // This matches your additionalFields
+  role?: string;
 }
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+
   session: {
     expiresIn: 60 * 60 * 24 * 7,
     updateAge: 60 * 60 * 24,
     cookieOptions: {
       driverOptions: {
-        sameSite: "none",
-        secure: true,
+        sameSite: isProd ? "none" : "lax",
+
+        secure: isProd,
         httpOnly: true,
       },
     },
   },
+
   emailVerification: {
     sendOnSignUp: false,
     sendVerificationEmail: async ({
@@ -45,6 +50,7 @@ export const auth = betterAuth({
       });
     },
   },
+
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
@@ -63,6 +69,7 @@ export const auth = betterAuth({
       });
     },
   },
+
   user: {
     additionalFields: {
       role: {
@@ -77,11 +84,11 @@ export const auth = betterAuth({
 
   advanced: {
     cookiePrefix: "agencypulse",
-
     crossSubdomain: {
-      enabled: true,
+      enabled: isProd,
     },
-    useSecureCookies: true,
+
+    useSecureCookies: isProd,
   },
 
   secret: process.env.BETTER_AUTH_SECRET!,
