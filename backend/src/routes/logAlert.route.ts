@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { authMiddleware } from "../../globalMiddleware/auth.middlware";
-import { getAlerts, getLogs } from "./logAlert.controller";
+import { authMiddleware } from "../middleware/auth.middlware";
+import { getAlerts, getLogs } from "../controllers/logAlert.controller";
 
 const logAlertRoute = Router();
 

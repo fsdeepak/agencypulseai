@@ -9,15 +9,15 @@ import {
   resetPassword,
   setPassword,
   verifyEmail,
-} from "./auth.controller";
-import { authMiddleware } from "../../globalMiddleware/auth.middlware";
-import { validate } from "../../globalMiddleware/validate.middleware";
+} from "../controllers/auth.controller";
+import { authMiddleware } from "../middleware/auth.middlware";
+import { validate } from "../middleware/validate.middleware";
 import {
   loginSchema,
   registerSchema,
   resetPasswordSchema,
   setPasswordSchema,
-} from "./auth.schema";
+} from "../schema/auth.schema";
 
 const authRoute = Router();
 

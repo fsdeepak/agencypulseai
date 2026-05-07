@@ -1,13 +1,16 @@
 import { Router } from "express";
-import { authMiddleware } from "../../globalMiddleware/auth.middlware";
+import { authMiddleware } from "../middleware/auth.middlware";
 import {
   createWebsite,
   deleteWebsite,
   getWebsites,
   updateWebsite,
-} from "./website.controller";
-import { validate } from "../../globalMiddleware/validate.middleware";
-import { createWebsiteSchema, updateWebsiteSchema } from "./website.schema";
+} from "../controllers/website.controller";
+import { validate } from "../middleware/validate.middleware";
+import {
+  createWebsiteSchema,
+  updateWebsiteSchema,
+} from "../schema/website.schema";
 
 const websiteRoute = Router();
 

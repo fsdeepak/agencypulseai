@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { prisma } from "../../config/db.config";
+import { prisma } from "../config/db.config";
 import crypto from "crypto";
 
 export async function createWebsite(req: Request, res: Response) {

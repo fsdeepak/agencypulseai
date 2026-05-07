@@ -1,21 +1,15 @@
 import "dotenv/config";
 import cookieParser from "cookie-parser";
 import express, { Application } from "express";
-import authRoute from "./modules/auth/auth.route";
+import authRoute from "./routes/auth.route";
 import cors from "cors";
-import websiteRoute from "./modules/website/website.route";
-import sdkRoute from "./modules/collectData/collectData.route";
-import "./modules/collectData/aiJob";
-import logAlertRoute from "./modules/logAlert/logAlert.route";
+import websiteRoute from "./routes/website.route";
+import sdkRoute from "./routes/collectData.route";
+import "./lib/aiJob";
+import logAlertRoute from "./routes/logAlert.route";
+import healthRoute from "./routes/health.route";
 
 const app: Application = express();
-
-// const mainCors = cors({
-//   origin: process.env.BETTER_AUTH_TRUSTED,
-//   credentials: true,
-//   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-//   allowedHeaders: ["Content-Type", "Authorization"],
-// });
 
 const collectorCors = cors({
   origin: true,
@@ -26,6 +20,8 @@ const collectorCors = cors({
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+
+app.use("/api/", healthRoute);
 
 app.use("/api/auth", authRoute);
 

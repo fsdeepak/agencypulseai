@@ -1,6 +1,6 @@
 import { fromNodeHeaders } from "better-auth/node";
-import { auth } from "../../lib/auth";
-import { prisma } from "../../config/db.config";
+import { auth } from "../lib/auth";
+import { prisma } from "../config/db.config";
 import { Request, Response as ExResponse } from "express";
 
 const mapAuthHeaders = (authResponse: Response, res: ExResponse) => {

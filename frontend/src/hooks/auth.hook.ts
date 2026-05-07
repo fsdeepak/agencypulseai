@@ -72,6 +72,7 @@ export const useLogout = () => {
     mutationFn: handleLogout,
     onSuccess: () => {
       toast.success("Logout successfully.");
+      window.location.href = "/login";
     },
   });
 };

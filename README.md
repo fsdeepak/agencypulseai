@@ -306,7 +306,7 @@ Key models:
   <sub>Built with ❤️ using Next.js, Express, Prisma, and Google Gemini</sub>
 </div>
 
-🌐 Deployment (Render)
+🌐 Deployment (Render / Vercel)
 This project is optimized for deployment on Render as two separate services.
 
 📡 Backend Service
@@ -319,15 +319,9 @@ Start Command: npm start
 Env Vars: Ensure DATABASE_URL, GEMINI_API, and BETTER_AUTH_SECRET are set.
 
 🖥️ Frontend Service
-Root Directory: frontend
-
-Build Command: npm install && npm run build
-
-Start Command: npm start
-
-Env Vars: NEXT_PUBLIC_API_URL (Pointing to your Backend URL).
+Just connect your github, and provide your frontend folder
 
 ## 🔗 Live
 
-- **Frontend:** https://agencypulse.onrender.com
+- **Frontend:** https://agencypulseai.vercel.app
 - **Backend API:** https://agencypulseai.onrender.com

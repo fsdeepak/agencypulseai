@@ -1,5 +1,5 @@
-import { prisma } from "../../config/db.config";
-import { model } from "../../config/ai.config";
+import { prisma } from "../config/db.config";
+import { model } from "../config/ai.config";
 
 setInterval(async () => {
   const oneMinuteAgo = new Date(Date.now() - 60 * 1000);

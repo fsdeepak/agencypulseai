@@ -1,7 +1,5 @@
-const sparkHeights = [
-  30, 45, 38, 60, 52, 75, 58, 80, 65, 90, 72, 85, 68, 95, 78, 88, 70, 92, 76,
-  84, 62, 96, 74, 88,
-];
+import { sparkHeights } from "@/components/ui/Icons";
+
 const leftSide = () => {
   return (
     <div className="hidden lg:flex flex-col justify-between p-12 bg-gradient-to-br from-[#0d0d16] via-[#13131b] to-[#1a0d2e] border border-white/5 border-r-0 rounded-l-3xl relative overflow-hidden">

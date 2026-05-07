@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { prisma } from "../../config/db.config";
+import { prisma } from "../config/db.config";
 
 export async function getLogs(req: Request, res: Response) {
   try {
