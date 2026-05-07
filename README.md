@@ -305,3 +305,29 @@ Key models:
 <div align="center">
   <sub>Built with ❤️ using Next.js, Express, Prisma, and Google Gemini</sub>
 </div>
+
+🌐 Deployment (Render)
+This project is optimized for deployment on Render as two separate services.
+
+📡 Backend Service
+Root Directory: backend
+
+Build Command: npm install && npm run build
+
+Start Command: npm start
+
+Env Vars: Ensure DATABASE_URL, GEMINI_API, and BETTER_AUTH_SECRET are set.
+
+🖥️ Frontend Service
+Root Directory: frontend
+
+Build Command: npm install && npm run build
+
+Start Command: npm start
+
+Env Vars: NEXT_PUBLIC_API_URL (Pointing to your Backend URL).
+
+## 🔗 Live
+
+- **Frontend:** https://agencypulse.onrender.com
+- **Backend API:** https://agencypulseai.onrender.com
