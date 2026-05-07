@@ -20,6 +20,13 @@ export const auth = betterAuth({
   session: {
     expiresIn: 60 * 60 * 24 * 7,
     updateAge: 60 * 60 * 24,
+    cookieOptions: {
+      driverOptions: {
+        sameSite: "none",
+        secure: true,
+        httpOnly: true,
+      },
+    },
   },
   emailVerification: {
     sendOnSignUp: false,
@@ -69,8 +76,12 @@ export const auth = betterAuth({
   trustedOrigins: [process.env.BETTER_AUTH_TRUSTED!],
 
   advanced: {
-    cookiePrefix: "better-auth",
-    useSecureCookies: process.env.NODE_ENV === "production",
+    cookiePrefix: "agencypulse",
+
+    crossSubdomain: {
+      enabled: true,
+    },
+    useSecureCookies: true,
   },
 
   secret: process.env.BETTER_AUTH_SECRET!,
