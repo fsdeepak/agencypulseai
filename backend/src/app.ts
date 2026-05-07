@@ -1,3 +1,4 @@
+import "dotenv/config";
 import cookieParser from "cookie-parser";
 import express, { Application } from "express";
 import authRoute from "./modules/auth/auth.route";
@@ -10,7 +11,7 @@ import logAlertRoute from "./modules/logAlert/logAlert.route";
 const app: Application = express();
 
 const mainCors = cors({
-  origin: "http://localhost:3000",
+  origin: process.env.BETTER_AUTH_TRUSTED,
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
