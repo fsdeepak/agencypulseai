@@ -15,7 +15,10 @@ export const authMiddleware = async (
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  req.user = session.user;
+  req.user = {
+    ...session.user,
+    role: session.user.role ?? "USER",
+  };
   req.session = session.session;
   next();
 };
