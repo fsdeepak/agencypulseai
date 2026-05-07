@@ -1,9 +1,9 @@
 import { fromNodeHeaders } from "better-auth/node";
 import { auth } from "../../lib/auth";
 import { prisma } from "../../config/db.config";
-import { Request, Response } from "express";
+import { Request, Response as ExResponse } from "express";
 
-const mapAuthHeaders = (authResponse: Response, res: Response) => {
+const mapAuthHeaders = (authResponse: Response, res: ExResponse) => {
   authResponse.headers.forEach((value: string, key: string) => {
     if (key.toLowerCase() === "set-cookie") {
       res.append(key, value);
@@ -13,7 +13,7 @@ const mapAuthHeaders = (authResponse: Response, res: Response) => {
   });
 };
 
-export async function register(req: Request, res: Response) {
+export async function register(req: Request, res: ExResponse) {
   try {
     const { name, email, password } = req.body;
 
@@ -63,7 +63,7 @@ export async function register(req: Request, res: Response) {
   }
 }
 
-export async function verifyEmail(req: Request, res: Response) {
+export async function verifyEmail(req: Request, res: ExResponse) {
   const { token, callbackURL } = req.query; // Capture the callbackURL from the link
 
   if (!token || typeof token !== "string") {
@@ -102,7 +102,7 @@ export async function verifyEmail(req: Request, res: Response) {
   }
 }
 
-export async function login(req: Request, res: Response) {
+export async function login(req: Request, res: ExResponse) {
   try {
     const { email, password } = req.body;
 
@@ -115,7 +115,7 @@ export async function login(req: Request, res: Response) {
     });
 
     if (!authResponse.ok) {
-      const errorData = await authResponse.json();
+      const errorData = (await authResponse.json()) as any;
       return res.status(authResponse.status).json({
         success: false,
         message: errorData.message || "Registration failed",
@@ -141,7 +141,7 @@ export async function login(req: Request, res: Response) {
   }
 }
 
-export async function logout(req: Request, res: Response) {
+export async function logout(req: Request, res: ExResponse) {
   try {
     const authResponse = await auth.api.signOut({
       headers: fromNodeHeaders(req.headers),
@@ -160,7 +160,7 @@ export async function logout(req: Request, res: Response) {
   }
 }
 
-export async function getMe(req: Request, res: Response) {
+export async function getMe(req: Request, res: ExResponse) {
   try {
     const { id, email, name, role } = req.user;
 
@@ -181,7 +181,7 @@ export async function getMe(req: Request, res: Response) {
   }
 }
 
-export async function resendVerificationEmail(req: Request, res: Response) {
+export async function resendVerificationEmail(req: Request, res: ExResponse) {
   const { email } = req.body;
 
   try {
@@ -225,7 +225,7 @@ export async function resendVerificationEmail(req: Request, res: Response) {
   }
 }
 
-export async function resetPassword(req: Request, res: Response) {
+export async function resetPassword(req: Request, res: ExResponse) {
   const { email } = req.body;
 
   if (!email) {
@@ -257,14 +257,14 @@ export async function resetPassword(req: Request, res: Response) {
   }
 }
 
-export async function getResetToken(req: Request, res: Response) {
+export async function getResetToken(req: Request, res: ExResponse) {
   const { token } = req.params;
 
   const frontendURl = `${process.env.RESETPASSWORD}?token=${token}`;
   return res.redirect(frontendURl);
 }
 
-export async function setPassword(req: Request, res: Response) {
+export async function setPassword(req: Request, res: ExResponse) {
   const { password, token } = req.body;
 
   if (!password || !token) {
