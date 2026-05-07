@@ -2,7 +2,7 @@ import "dotenv/config";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: "/api",
   withCredentials: true,
   timeout: 10000,
 });

@@ -25,9 +25,9 @@ export const auth = betterAuth({
     updateAge: 60 * 60 * 24,
     cookieOptions: {
       driverOptions: {
-        sameSite: isProd ? "none" : "lax",
+        sameSite: "lax",
 
-        secure: isProd,
+        secure: true,
         httpOnly: true,
       },
     },
