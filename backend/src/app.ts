@@ -8,6 +8,7 @@ import sdkRoute from "./routes/collectData.route";
 import "./lib/aiJob";
 import logAlertRoute from "./routes/logAlert.route";
 import healthRoute from "./routes/health.route";
+import helmet from "helmet";
 
 const app: Application = express();
 
@@ -19,6 +20,7 @@ const collectorCors = cors({
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/", healthRoute);
