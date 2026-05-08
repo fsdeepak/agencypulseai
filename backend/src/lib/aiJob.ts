@@ -8,7 +8,7 @@ export async function runAiAnalysis() {
   try {
     const alerts = await prisma.alert.findMany({
       where: {
-        severity: "HIGH",
+        severity: { in: ["HIGH", "CRITICAL"] },
         aiReason: null,
         aiStatus: "PENDING",
       },
