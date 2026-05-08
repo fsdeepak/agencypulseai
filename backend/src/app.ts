@@ -9,6 +9,8 @@ import "./lib/aiJob";
 import logAlertRoute from "./routes/logAlert.route";
 import healthRoute from "./routes/health.route";
 import helmet from "helmet";
+import cron from "node-cron";
+import { runAiAnalysis } from "./lib/aiJob";
 
 const app: Application = express();
 
@@ -22,6 +24,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
+
+cron.schedule("*/1 * * * *", () => {
+  console.log("Running scheduled AI analysis...");
+  runAiAnalysis();
+});
 
 app.use("/api/", healthRoute);
 

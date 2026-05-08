@@ -45,8 +45,11 @@ export async function runAiAnalysis() {
       }));
 
       const prompt = `Analyze the following system alerts: ${JSON.stringify(alertSample)}. 
-      Provide a root cause and a suggestion for a fix. 
-      Respond ONLY in valid JSON format: {"reason": "string", "suggestion": "string"}`;
+          Provide a root cause (reason) and a suggestion for a fix. 
+          CRITICAL CONSTRAINTS:
+          1. The "reason" must be under 40 words.
+          2. The "suggestion" must be under 40 words.
+          3. Respond ONLY in valid JSON format: {"reason": "string", "suggestion": "string"}`;
 
       try {
         const result = await model.invoke(prompt);
