@@ -40,7 +40,13 @@ export const columns: Column<Alert>[] = [
   {
     header: "Status",
     render: (alert) => (
-      <span className="px-2 py-0.5 rounded-full text-[11px] font-bold border bg-red-600 text-white border-red-100">
+      <span
+        className={`px-2 py-0.5 rounded-full text-[11px] font-bold border ${
+          alert.status >= 400
+            ? "bg-red-600 text-white border-red-100"
+            : "bg-green-500 text-white border-green-100"
+        }`}
+      >
         {alert.status}
       </span>
     ),
