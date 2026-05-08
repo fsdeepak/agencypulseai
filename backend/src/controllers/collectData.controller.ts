@@ -35,19 +35,16 @@ export async function collectData(req: Request, res: Response) {
       return e.status >= 400 || e.responseTime > 1000;
     });
 
-    function getSeverity(e: any) {
-      if (e.status >= 500 || e.responseTime > 2000) {
+    function getSeverity(e: any): "CRITICAL" | "HIGH" | "MEDIUM" {
+      if (e.status >= 500 || e.responseTime > 2500) {
+        return "CRITICAL";
+      }
+
+      if (e.status >= 400 || e.responseTime > 1500) {
         return "HIGH";
       }
 
-      if (
-        (e.status >= 400 && e.status < 500) ||
-        (e.responseTime > 1000 && e.responseTime <= 2000)
-      ) {
-        return "MEDIUM";
-      }
-
-      return "LOW";
+      return "MEDIUM";
     }
 
     if (alerts.length > 0) {

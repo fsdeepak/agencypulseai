@@ -23,7 +23,7 @@ export default function WebsitealertsPage() {
   const groupedAlerts = useMemo((): GroupedAlerts[] => {
     const groups = allAlerts.reduce(
       (acc, alert) => {
-        const key = `${alert.method}-${alert.url}-${alert.message}`;
+        const key = `${alert.createdAt}-${alert.method}-${alert.url}-${alert.message}`;
 
         if (!acc[key]) {
           acc[key] = {

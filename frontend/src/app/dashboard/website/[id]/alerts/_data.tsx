@@ -9,6 +9,7 @@ export interface Alert {
   severity: string;
   type: string;
   stack: string;
+  aiStatus: string;
   aiReason: string;
   aiSuggestion: string;
   status: number;
@@ -100,6 +101,13 @@ export const columns: Column<Alert>[] = [
       </div>
     ),
     className: "w-[5%]",
+  },
+  {
+    header: "AI Status",
+    render: (alert) => (
+      <span className="text-gray-200 font-semibold">{alert.aiStatus}</span>
+    ),
+    className: "w-[1%]",
   },
   {
     header: "AI Reason",

@@ -142,6 +142,7 @@ model alert {
   method String
   status Int?
 
+  aiStatus     String  @default("PENDING")
   aiReason     String?
   aiSuggestion String?
 

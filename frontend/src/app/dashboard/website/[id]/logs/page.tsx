@@ -23,7 +23,7 @@ export default function WebsiteLogsPage() {
   const groupedLogs = useMemo((): GroupedLogs[] => {
     const groups = allLogs.reduce(
       (acc, log) => {
-        const key = `${log.method}-${log.url}-${log.message}`;
+        const key = `${log.createdAt}-${log.method}-${log.url}-${log.message}`;
 
         if (!acc[key]) {
           acc[key] = {
