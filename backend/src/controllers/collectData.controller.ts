@@ -47,11 +47,19 @@ export async function collectData(req: Request, res: Response) {
       return "MEDIUM";
     }
 
+    function getType(e: any): "REQUEST" | "ERROR" {
+      if (e.status > 400) {
+        return "ERROR";
+      } else {
+        return "REQUEST";
+      }
+    }
+
     if (alerts.length > 0) {
       await prisma.alert.createMany({
         data: alerts.map((e: any) => ({
           websiteId: website.id,
-          type: "ERROR",
+          type: getType(e),
           message: e.message || "Request failed",
           url: e.url,
           method: e.method,
