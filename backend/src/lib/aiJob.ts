@@ -1,9 +1,10 @@
 import { prisma } from "../config/db.config";
-import { model } from "../config/ai.config";
+import { model } from "../config/ai.config"; // Ensure this is codestral-2508
+import { JsonOutputParser } from "@langchain/core/output_parsers";
 
 export async function runAiAnalysis() {
   const startTime = Date.now();
-  console.log(`[${new Date().toISOString()}] Starting AI Analysis Batch...`);
+  const parser = new JsonOutputParser();
 
   try {
     const alerts = await prisma.alert.findMany({
@@ -16,96 +17,52 @@ export async function runAiAnalysis() {
       take: 50,
     });
 
-    if (alerts.length === 0) {
-      console.log("No new high-severity alerts found. Skipping.");
-      return;
-    }
+    if (alerts.length === 0) return;
 
     await prisma.alert.updateMany({
       where: { id: { in: alerts.map((a) => a.id) } },
       data: { aiStatus: "PROCESSING" },
     });
 
-    const grouped: Record<string, any[]> = {};
-    alerts.forEach((a) => {
-      const key = `${a.method}:${a.url}`;
-      if (!grouped[key]) grouped[key] = [];
-      grouped[key].push(a);
-    });
+    const grouped = alerts.reduce(
+      (acc, alert) => {
+        const key = `${alert.method}:${alert.url}`;
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(alert);
+        return acc;
+      },
+      {} as Record<string, typeof alerts>,
+    );
 
-    // 4. Process each group
-    for (const key in grouped) {
-      const group = grouped[key];
+    for (const [key, group] of Object.entries(grouped)) {
       const groupIds = group.map((a) => a.id);
 
-      const alertSample = group.map((a) => ({
-        message: a.message,
-        statusCode: a.status,
-        timestamp: a.createdAt,
-      }));
-
-      const prompt = `Analyze the following system alerts: ${JSON.stringify(alertSample)}. 
-          Provide a root cause (reason) and a suggestion for a fix. 
-          CRITICAL CONSTRAINTS:
-          1. The "reason" must be under 40 words.
-          2. The "suggestion" must be under 40 words.
-          3. Respond ONLY in valid JSON format: {"reason": "string", "suggestion": "string"}`;
+      const prompt = `System: You are an expert SRE. Analyze these logs for ${key}.
+        Logs: ${JSON.stringify(group.map((a) => ({ msg: a.message, stack: a.stack, responseTime: a.responseTime })))}
+        Respond ONLY in JSON: {"reason": "string", "suggestion": "string"} and provide under 40 words both reason, and suggestion.`;
 
       try {
         const result = await model.invoke(prompt);
-
-        const rawContent =
-          typeof result.content === "string"
-            ? result.content
-            : JSON.stringify(result.content);
-
-        const cleanedJson = rawContent
-          .replace(/```(?:json)?\n?|```/g, "")
-          .trim();
-
-        const parsed = JSON.parse(cleanedJson);
+        const parsed = await parser.parse(result.content as string);
 
         await prisma.alert.updateMany({
           where: { id: { in: groupIds } },
           data: {
-            aiReason: parsed.reason || "Analysis completed",
-            aiSuggestion:
-              parsed.suggestion || "No specific suggestion provided",
+            aiReason: parsed.reason,
+            aiSuggestion: parsed.suggestion,
             aiStatus: "COMPLETED",
           },
         });
 
-        console.log(`✅ Completed ${group.length} alerts for ${key}`);
-
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-      } catch (innerError: any) {
-        console.error(
-          `⚠️ AI failed for ${key}: ${innerError.message}. Reverting to PENDING.`,
-        );
-
+        await new Promise((resolve) => setTimeout(resolve, 1100));
+      } catch (innerError) {
         await prisma.alert.updateMany({
           where: { id: { in: groupIds } },
           data: { aiStatus: "PENDING" },
         });
       }
     }
-
-    const duration = (Date.now() - startTime) / 1000;
-    console.log(`[${new Date().toISOString()}] Batch finished in ${duration}s`);
-  } catch (error: any) {
-    console.error("❌ CRITICAL JOB FAILURE:", error.message);
+  } catch (error) {
+    console.error("❌ CRITICAL JOB FAILURE:", error);
   }
-}
-
-if (require.main === module) {
-  runAiAnalysis()
-    .then(async () => {
-      await prisma.$disconnect();
-      process.exit(0);
-    })
-    .catch(async (e) => {
-      console.error(e);
-      await prisma.$disconnect();
-      process.exit(1);
-    });
 }

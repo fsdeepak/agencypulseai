@@ -1,9 +1,10 @@
 import "dotenv/config";
-import { ChatGoogle } from "@langchain/google";
+import { ChatMistralAI } from "@langchain/mistralai";
 
-export const model = new ChatGoogle({
-  model: "gemini-2.5-flash-lite",
+export const model = new ChatMistralAI({
+  model: "codestral-2508",
+
   apiKey: process.env.GEMINI_API,
-  maxOutputTokens: 2048,
-  maxRetries: 5,
+
+  temperature: 0,
 });

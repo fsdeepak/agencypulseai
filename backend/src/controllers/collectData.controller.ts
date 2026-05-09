@@ -65,6 +65,8 @@ export async function collectData(req: Request, res: Response) {
           method: e.method,
           status: e.status,
           severity: getSeverity(e),
+          stack: e.stack ?? null,
+          responseTime: e.responseTime,
         })),
       });
     }

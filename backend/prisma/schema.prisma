@@ -134,9 +134,11 @@ model alert {
   websiteId String
   website   website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
 
-  type     String
-  severity String @default("MEDIUM")
-  message  String
+  type         String
+  severity     String  @default("MEDIUM")
+  message      String?
+  stack        String?
+  responseTime Int?
 
   url    String
   method String
