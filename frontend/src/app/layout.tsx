@@ -4,6 +4,7 @@ import "./globals.css";
 import Provider from "./providers";
 import { Toaster } from "sonner";
 import Nav from "@/components/nav/nav";
+import HomePopup from "@/components/ui/Popup";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,6 +41,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-[#0A0A12] font-[family-name:var(--font-inter)]">
         <Provider>
           <Nav />
+          <HomePopup />
           {children}
           <Toaster position="top-right" richColors theme="dark" closeButton />
         </Provider>
