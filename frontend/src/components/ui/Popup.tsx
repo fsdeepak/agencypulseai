@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, CSSProperties } from "react";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 
@@ -37,7 +37,7 @@ function HomePopup() {
   );
 }
 
-const styles = {
+const styles: Record<string, CSSProperties> = {
   modal: {
     fontSize: "16px",
     padding: "20px",
